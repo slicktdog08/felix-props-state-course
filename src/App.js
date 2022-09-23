@@ -1,23 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import User from './User';
+import {
+  Typography, Grid
+} from '@mui/material';
 
 function App() {
+
+  const [users, setUsers] = useState([
+    {
+      id: 0,
+      firstName: 'Tyler',
+      lastName: 'Clay',
+      favColor: 'blue',
+      age: 24
+    },
+    {
+      id: 1,
+      firstName: 'Felix',
+      lastName: 'Perez',
+      favColor: 'white',
+      age: 23
+    }
+  ]);
+
+  const [editModeID, setEditModeID] = useState(null);
+
+  const handleUserSave = (editedUser) => {
+    console.log('editedUser', editedUser);
+    const newUsers = [...users];
+    const userIndex = users.findIndex((user) => user.id === editedUser.id);
+    console.log('userIndex', userIndex)
+    newUsers[userIndex] = editedUser;
+    setUsers(newUsers);
+  }
+
+  const handleEditClick = (id) => {
+    setEditModeID(id);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Typography
+        variant='h3'
+      >
+        Users
+      </Typography>
+      <br />
+
+      <Grid container spacing={3}>
+        {users.map((user) => 
+          <User 
+            user={user} 
+            handleSave={handleUserSave}
+            handleEditClick={handleEditClick}
+            editModeID={editModeID}
+          />)
+        }
+      </Grid>
+      {users.map((user) => JSON.stringify(user))}
     </div>
   );
 }
